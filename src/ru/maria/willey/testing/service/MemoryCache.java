@@ -88,7 +88,7 @@ public class MemoryCache<K, V> implements ICache<Cache, Object> {
         int oldSize = list.size() - 1;
         for (int i = oldSize; i > oldSize - 3; i--) {
             File file = diskCache.writeToDisk(list.get(i));
-            diskCache.deleteFile(file);
+          //  diskCache.deleteFile(file);
             remove(list.get(i));
         }
         remove(list.get(0));
