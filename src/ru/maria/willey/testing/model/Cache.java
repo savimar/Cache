@@ -1,13 +1,15 @@
 package ru.maria.willey.testing.model;
 
-import java.util.Comparator;
+import java.util.UUID;
 
 /**
  * Created by User on 024 24.07.16.
  */
-public class Cache implements Comparable{
+public class Cache implements Comparable<Cache> {
     Object cache;
     int frequency;
+    UUID id;
+   /* String filename;*/
 
     public int getFrequency() {
         return frequency;
@@ -19,6 +21,10 @@ public class Cache implements Comparable{
 
     public Cache(Object cache) {
         this.cache = cache;
+        this.frequency = 0;
+        this.id = UUID.randomUUID();
+      /*  this.filename = id.toString().replaceAll("-","") + ".txt";*/
+
     }
 
     public Cache() {
@@ -32,6 +38,13 @@ public class Cache implements Comparable{
         return cache;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -40,27 +53,35 @@ public class Cache implements Comparable{
 
         Cache cache1 = (Cache) o;
 
-        return cache.equals(cache1.cache);
+        if (frequency != cache1.frequency) return false;
+        if (!cache.equals(cache1.cache)) return false;
+        return id.equals(cache1.id);
 
     }
 
     @Override
     public int hashCode() {
-        return cache.hashCode();
+        int result = cache.hashCode();
+        result = 31 * result + frequency;
+        result = 31 * result + id.hashCode();
+        return result;
+    }
+
+    @Override
+    public int compareTo(Cache o) {
+        if (this.getFrequency() - o.getFrequency() == 0) {
+            return this.hashCode() - o.hashCode();
+        } else {
+            return this.getFrequency() - o.getFrequency();
+        }
     }
 
     @Override
     public String toString() {
         return "Cache{" +
                 "cache=" + cache +
+                ", frequency=" + frequency +
+                ", id=" + id +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        if (this.hashCode() <= o.hashCode()){
-            return 1;
-        }
-        else return -1;
     }
 }
