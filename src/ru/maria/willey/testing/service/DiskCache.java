@@ -8,14 +8,42 @@ import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-/**
- * Created by User on 025 25.07.16.
- */
-public class DiskCache implements ICache<Cache, Object> {
-    String filename;
-    Map<Cache, Object> diskCaches;
-    File tmpFile;
 
+public class DiskCache implements ICache<Cache, Object> {
+    private String filename;
+    private Map<Cache, Object> diskCaches;
+    private File tmpFile;
+
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public Map<Cache, Object> getDiskCaches() {
+        return diskCaches;
+    }
+
+    public void setDiskCaches(Map<Cache, Object> diskCaches) {
+        this.diskCaches = diskCaches;
+    }
+
+    public File getTmpFile() {
+        return tmpFile;
+    }
+
+    public void setTmpFile(File tmpFile) {
+        this.tmpFile = tmpFile;
+    }
+
+    public DiskCache(Map<Cache, Object> diskCaches) {
+        new DiskCache();
+
+        this.diskCaches = diskCaches;
+    }
 
     public DiskCache() {
         diskCaches = new ConcurrentSkipListMap<>();
@@ -23,6 +51,7 @@ public class DiskCache implements ICache<Cache, Object> {
         if (!tempFolder.exists()) {
             tempFolder.mkdirs();
         }
+
 
 
     }
@@ -75,4 +104,6 @@ public class DiskCache implements ICache<Cache, Object> {
     public void deleteFile(File tmpFile) {
         tmpFile.deleteOnExit();
     }
+
+
 }

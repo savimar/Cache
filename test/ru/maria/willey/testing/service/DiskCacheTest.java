@@ -10,16 +10,12 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import static org.junit.Assert.*;
-
-/**
- * Created by User on 025 25.07.16.
- */
 public class DiskCacheTest {
-    Map<Cache, Object> map;
-    DiskCache diskCache;
-    User user1;
-    Cache cache1;
+    private Map<Cache, Object> map;
+    private DiskCache diskCache;
+    private User user1;
+    private Cache cache1;
+
     @Before
     public void setUp() throws Exception {
 
@@ -27,46 +23,52 @@ public class DiskCacheTest {
         map = new ConcurrentSkipListMap<>();
         cache1 = new Cache(user1);
         map.put(cache1, user1);
-        diskCache = new DiskCache();
+        diskCache = new DiskCache(map);
 
     }
 
     @Test
     public void get() throws Exception {
+        Assert.assertEquals(diskCache.get(cache1), user1);
 
     }
 
     @Test
     public void put() throws Exception {
+        User user2 = new User(2, "Ivan", "Sidorov");
+        Cache cache2 = new Cache(user2);
+        diskCache.put(cache2, user2);
+        map.put(cache2, user2);
+        Assert.assertEquals(map, diskCache.getDiskCaches());
 
     }
 
     @Test
     public void count() throws Exception {
-
+        Assert.assertEquals(1, diskCache.count());
     }
 
     @Test
     public void remove() throws Exception {
+        diskCache.remove(cache1);
+        Assert.assertEquals(0, diskCache.count());
 
     }
 
     @Test
     public void clear() throws Exception {
+        diskCache.clear();
+        Assert.assertEquals(0, diskCache.count());
 
     }
 
     @Test
     public void writeToDisk() throws Exception {
-       File tmp = diskCache.writeToDisk(cache1);
+        File tmp = diskCache.writeToDisk(cache1);
         Assert.assertEquals("C:\\", tmp.getAbsolutePath().substring(0, 3));
         diskCache.deleteFile(tmp);
 
     }
 
-    @Test
-    public void deleteFile() throws Exception {
-
-    }
 
 }

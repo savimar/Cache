@@ -4,6 +4,7 @@ import ru.maria.willey.testing.interfaces.ICache;
 import ru.maria.willey.testing.model.Cache;
 import ru.maria.willey.testing.util.CacheException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -13,12 +14,10 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * Created by User on 024 24.07.16.
  */
 public class MemoryCache<K, V> implements ICache<Cache, Object> {
-    private Map<Cache, Object> cacheMap;
+    private Map<Cache, Object> cacheMap = new ConcurrentSkipListMap<>();
 
 
     public MemoryCache() {
-        cacheMap = new ConcurrentSkipListMap<>();
-
     }
 
     public MemoryCache(Map<Cache, Object> cacheMap) {
@@ -39,9 +38,12 @@ public class MemoryCache<K, V> implements ICache<Cache, Object> {
 
     @Override
     public void put(Cache key, Object value) throws CacheException, IOException, ClassNotFoundException {
-        if (count() <= 16) {//TODO removing
+        if (count() <= 16) {
             cacheMap.put(key, value);
             incrementMap(key);
+        } else {
+            removingOldItems();
+            put(key, value);
         }
     }
 
@@ -77,47 +79,25 @@ public class MemoryCache<K, V> implements ICache<Cache, Object> {
             list.add(entry.getKey());
         }
 
-        Comparator<Cache> cmp = Comparator.comparingInt((Cache c) -> c.getFrequency()).thenComparingInt((Cache c) -> c.getFrequency());
+        Comparator<Cache> cmp = Comparator.comparingInt(Cache::getFrequency).thenComparingInt(Cache::getFrequency);
         Collections.sort(list, cmp);
         return list;
 
     }
 
+    public synchronized void removingOldItems() throws CacheException, IOException {
+        List<Cache> list = geSortFrequent(cacheMap);
+        DiskCache diskCache = new DiskCache();
+        int oldSize = list.size() - 1;
+        for (int i = oldSize; i > oldSize - 3; i--) {
+            File file = diskCache.writeToDisk(list.get(i));
+            diskCache.deleteFile(file);
+            remove(list.get(i));
+        }
+        remove(list.get(0));
+        remove(list.get(1));
 
-
-   /* public Cache getBigFrequencyElement() {
-       Map<Cache, Integer> map = cacheMap
-                .entrySet()
-                .parallelStream()
-                .map(entry -> entry.setValue(entry.getKey().getFrequency()))
-               .
-
-
-
-return
-*/
-
-        /*.get();
-        .max((o1, o2) -> (o1.getKey().getFrequency()).compare(o2.getKey().getFrequency()))
-        .get();*/
-
-//}
-
-
-    /*public int getItemFrequency(Cache key) throws CacheException {
-        return frequencyMap.get(key);
     }
 
-    public Map.Entry<Cache, Integer> getLowFrequencyElement() {
-        return frequencyMap.entrySet()
-                .stream()
-                .min((o1, o2) -> o1.getValue().compareTo(o2.getValue()))
-                .get();
-    }
-*/
 
-  /*  private int getItemFrequency(Map.Entry<Cache, Object> entry) {
-        return entry.getKey().getFrequency();
-    }
-*/
 }
