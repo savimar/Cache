@@ -71,20 +71,12 @@ public class MemoryCache<K, V> implements ICache<Cache, Object> {
 
     }
 
-    public List getMostFrequent(Map<Cache, Object> map) {
+    public synchronized List geSortFrequent(Map<Cache, Object> map) {
         List<Cache> list = new ArrayList<>();
         for (Map.Entry<Cache, Object> entry : map.entrySet()) {
             list.add(entry.getKey());
-
-
         }
-       /* List temp = cacheMap
-                .entrySet()
-                .parallelStream()
-//                .max((entry1, entry2) -> entry1.getKey().getFrequency())
-                .collect(Collectors.groupingByConcurrent(Cache::getFrequency));
-*/
-               /* .map(entry -> entry.setValue(entry.getKey().getFrequency()));*/
+
         Comparator<Cache> cmp = Comparator.comparingInt((Cache c) -> c.getFrequency()).thenComparingInt((Cache c) -> c.getFrequency());
         Collections.sort(list, cmp);
         return list;

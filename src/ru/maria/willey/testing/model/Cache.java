@@ -1,14 +1,20 @@
 package ru.maria.willey.testing.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by User on 024 24.07.16.
  */
-public class Cache implements Comparable<Cache> {
+public class Cache implements Comparable<Cache>, Serializable {
+
+    private static final long serialVersionUID = 654742189L;
+
+
     Object cache;
     int frequency;
     UUID id;
+
    /* String filename;*/
 
     public int getFrequency() {

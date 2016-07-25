@@ -57,7 +57,7 @@ public class MemoryCacheTest {
     @Test
     public void getMostFrequent() throws Exception {
         List<Cache> list = Arrays.asList(cache2,cache1, cache3);
-        Assert.assertEquals(list, memoryCache.getMostFrequent(map));
+        Assert.assertEquals(list, memoryCache.geSortFrequent(map));
 
     }
 
