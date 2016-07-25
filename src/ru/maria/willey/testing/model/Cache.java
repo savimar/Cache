@@ -3,21 +3,15 @@ package ru.maria.willey.testing.model;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * Created by User on 024 24.07.16.
- */
 public class Cache implements Comparable<Cache>, Serializable {
 
     private static final long serialVersionUID = 654742189L;
 
+    private Object cache;
+    private int frequency;
+    private UUID id;
 
-    Object cache;
-    int frequency;
-    UUID id;
-
-   /* String filename;*/
-
-    public int getFrequency() {
+     public int getFrequency() {
         return frequency;
     }
 
@@ -29,7 +23,6 @@ public class Cache implements Comparable<Cache>, Serializable {
         this.cache = cache;
         this.frequency = 0;
         this.id = UUID.randomUUID();
-      /*  this.filename = id.toString().replaceAll("-","") + ".txt";*/
 
     }
 

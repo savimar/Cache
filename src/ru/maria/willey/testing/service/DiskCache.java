@@ -92,8 +92,6 @@ public class DiskCache implements ICache<Cache, Object> {
             writer.write(text);
             writer.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

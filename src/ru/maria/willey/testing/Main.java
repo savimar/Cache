@@ -6,9 +6,6 @@ import ru.maria.willey.testing.util.CacheException;
 
 import java.io.IOException;
 
-/**
- * Created by User on 025 25.07.16.
- */
 public class Main {
     public static void main(String[] args) throws CacheException, IOException, ClassNotFoundException {
         MemoryCache memoryCache = new MemoryCache<>();

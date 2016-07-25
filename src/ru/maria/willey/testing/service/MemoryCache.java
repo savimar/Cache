@@ -10,9 +10,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 
-/**
- * Created by User on 024 24.07.16.
- */
 public class MemoryCache<K, V> implements ICache<Cache, Object> {
     private Map<Cache, Object> cacheMap = new ConcurrentSkipListMap<>();
 
