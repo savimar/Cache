@@ -24,7 +24,6 @@ public class DiskCacheTest {
         cache1 = new Cache(user1);
         map.put(cache1, user1);
         diskCache = new DiskCache(map);
-
     }
 
     @Test
